@@ -135,12 +135,40 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var first = majorDiagonalColumnIndexAtFirstRow;
+      var board = this.rows();
+      var size = this.get('n');
+      var counter = 0;
+      debugger;
+      // iterate through rows, starting on row 0
+      for (var i = 0; i < size; i++) {
+        // if corresponding box is IN bounds, add that box's value to counter
+        if (this._isInBounds(i, first)) {
+          counter += board[i][first];
+        }
+        first++;
+      }
+
+      // return whether counter is greater than one
+      return counter > 1;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var board = this.rows(); // array of arrays
+      var size = this.get('n'); // length/height
+      var first = 0 - (size - 1); // very first starting index (i.e. -2 for an n = 3 board)
+
+      // starting it 'first' index, iterate through indeces up to size - 1
+      for (var i = first; i < size; i++) {
+        // if result of hasMajorDiagonalConflict() for current starting index is true
+        if (this.hasMajorDiagonalConflictAt(i) === true) {
+          // return true
+          return true;
+        }
+      }
+      // otherwise, return false    
+      return false;
     },
 
 
