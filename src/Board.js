@@ -139,7 +139,6 @@
       var board = this.rows();
       var size = this.get('n');
       var counter = 0;
-      debugger;
       // iterate through rows, starting on row 0
       for (var i = 0; i < size; i++) {
         // if corresponding box is IN bounds, add that box's value to counter
@@ -178,12 +177,41 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var board = this.rows();
+      var size = this.get('n');
+      var first = minorDiagonalColumnIndexAtFirstRow;
+      var counter = 0;
+
+      // iterate through rows, ending at size
+      for (var i = 0; i < size; i++) {
+        // if current block is in bounds
+        if (this._isInBounds(i, first)) {
+          // add contents to counter
+          counter += board[i][first];
+        }
+        // decrement 'first'
+        first--;
+      }
+      // return whether counter > 1
+      return counter > 1;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var board = this.rows();
+      var size = this.get('n');
+      var first = size + (size - 2);
+      console.log(first);
+      // starting at 'first' index, iterate BACKWARDS through indeces down to 0
+      for (var j = first; j >= 0; j--) {
+        console.log('poop');
+        // if result of hasMinorDiagonalConflictA() for our current 'first' index is true
+        if (this.hasMinorDiagonalConflictAt(j) === true) {
+          return true;
+        }
+      }
+      // otherwise, return false
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
