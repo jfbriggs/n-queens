@@ -105,12 +105,27 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var board = this.rows();
+      var size = this.get('n');
+      var total = 0;
+      // iterate through rows, adding colIndex value for each to total
+      board.forEach(function(row) {
+        total += row[colIndex];
+      });
+      // return whether or not total  is greater than 1
+      return total > 1;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var board = this.rows();
+      var size = this.get('n');
+      for (var i = 0; i < size; i++) {
+        if (this.hasColConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
