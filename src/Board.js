@@ -201,10 +201,8 @@
       var board = this.rows();
       var size = this.get('n');
       var first = size + (size - 2);
-      console.log(first);
       // starting at 'first' index, iterate BACKWARDS through indeces down to 0
       for (var j = first; j >= 0; j--) {
-        console.log('poop');
         // if result of hasMinorDiagonalConflictA() for our current 'first' index is true
         if (this.hasMinorDiagonalConflictAt(j) === true) {
           return true;
