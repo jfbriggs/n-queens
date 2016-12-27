@@ -27,9 +27,13 @@ window.findNRooksSolution = function(n) {
     // create variable for 'current row'
     currentRow = currentRow || 0;
 
-    // BASE CASE --> if 'current row' is greater than n
+    // BASE CASE --> if 'current row' is greater than n (i.e. no more rows)
     if (currentRow === n) {
-      // stop
+      // we have a working combination, so set solution to a copy of it and return
+      solution = _.map(board.rows(), function(row) {
+        return row.slice();
+      });
+      // and break out
       return;
     }
 
@@ -40,20 +44,12 @@ window.findNRooksSolution = function(n) {
       }
       // toggle piece in board for that row/index to be a 1
       board.togglePiece(currentRow, i);
-      // if we're on the last row...
-      if (currentRow === n - 1) {
-        // if hasAnyRooksConflicts run on the current board is false
-        if (!board.hasAnyRooksConflicts()) {
-        // increment solutionCount by 1
-          solution = _.map(board.rows(), function(row) {
-            return row.slice();
-          });
-          return;
-        }
+      // if what we currently have placed does not have conflicts
+      if (!board.hasAnyRooksConflicts()) {
+        // recursively re-run generateCombo for next row
+        return generateCombo(n, board, currentRow + 1);
       }
-      // re-run generateCombo recursively for the next row
-      generateCombo(n, board, currentRow + 1);
-      // toggle that same piece back to 0
+      // toggle the current piece back
       board.togglePiece(currentRow, i);
 
     }
@@ -77,12 +73,11 @@ window.countNRooksSolutions = function(n) {
   // create inner function to generate a combination and check for conflicts
   var generateCombo = function(n, board, currentRow) {
 
-    // create variable for 'current row'
-    currentRow = currentRow || 0;
-
-    // BASE CASE --> if 'current row' is greater than n
+    // BASE CASE --> if 'current row' is n (i.e. no more rows)
     if (currentRow === n) {
-      // stop
+      // we have a working combination, so increment solutionCount
+      solutionCount++;
+      // and break out
       return;
     }
 
@@ -90,24 +85,19 @@ window.countNRooksSolutions = function(n) {
     for (var i = 0; i < n; i++) {
       // toggle piece in board for that row/index to be a 1
       board.togglePiece(currentRow, i);
-      // if we're on the last row...
-      if (currentRow === n - 1) {
-        // if hasAnyRooksConflicts run on the current board is false
-        if (!board.hasAnyRooksConflicts()) {
-        // increment solutionCount by 1
-        solutionCount++;
-        }
+      // if what we currently have placed does not have conflicts
+      if (!board.hasAnyRooksConflicts()) {
+        // recursively re-run generateCombo for next row
+        generateCombo(n, board, currentRow + 1);
       }
-      // re-run generateCombo recursively for the next row
-      generateCombo(n, board, currentRow + 1);
-      // toggle that same piece back to 0
+      // toggle the current piece back
       board.togglePiece(currentRow, i);
 
     }
   }
   
   // run initial invocation of inner combo-generator function
-  generateCombo(n, board);
+  generateCombo(n, board, 0);
 
 
   // return total count
